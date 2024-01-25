@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,7 @@ public class ShortTermController {
     private final ShortTermService shortTermService;
 
     @PostMapping("shortFcst")
-    public ResponseEntity<List<ShortTerm>> useShortTermApi(@RequestBody DateInfo dateInfo) {
+    public ResponseEntity<List<ShortTerm>> useShortTermApi(@RequestBody @Valid DateInfo dateInfo) {
         return ResponseEntity.ok(shortTermService.searchShortTerm(dateInfo));
     }
 }
