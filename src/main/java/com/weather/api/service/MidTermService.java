@@ -28,7 +28,7 @@ public class MidTermService {
 
     public MidTermTotal searchTotal(MidLocationCode midLocationCode) {
         String requestUrl = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidFcst";
-        String regionId = locationToCode.searchBigLocation(midLocationCode.getLocation());
+        String regionId = locationToCode.searchTotalLocation(midLocationCode.getLocation());
         String dateTime = midLocationCode.getDateTime();
 
         try {
