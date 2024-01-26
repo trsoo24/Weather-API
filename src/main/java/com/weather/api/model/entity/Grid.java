@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public class Grid {
-    private double x;
-    private double y;
+    private int y;
+    private int x;
 
-    public Grid(double x, double y) {
-        this.x = x;
+    public Grid(int y, int x) {
         this.y = y;
+        this.x = x;
     }
 }

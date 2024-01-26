@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.weather.api.exception.CustomException;
 import com.weather.api.model.entity.Point;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -18,11 +17,10 @@ import static com.weather.api.exception.ErrorMessage.INVALID_ADDRESS;
 
 @Service
 public class AddressToPoint {
-    @Value("${spring.address.key}")
-    private String apiKey;
-    private final String type = "EPSG:4326";
-
     public Point getMapString(String searchAddr) {
+        String apiKey = "CC22F8E3-CDEE-35F2-AC69-D89B15F5C3AD";
+        String type = "EPSG:4326";
+
         StringBuilder sb = new StringBuilder("https://api.vworld.kr/req/address");
         sb.append("?service=address");
         sb.append("&request=GetCoord");
@@ -44,7 +42,11 @@ public class AddressToPoint {
 
             String jsonLongitude = jspoitn.get("y").getAsString();
             String jsonLatitude = jspoitn.get("x").getAsString();
-            return new Point(Double.parseDouble(jsonLongitude), Double.parseDouble(jsonLatitude));
+            Point point = Point.builder()
+                    .latitude(Double.parseDouble(jsonLatitude))
+                    .longitude(Double.parseDouble(jsonLongitude))
+                    .build();
+            return point;
         } catch (IOException e) {
             throw new CustomException(INVALID_ADDRESS);
         }
