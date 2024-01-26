@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.weather.api.exception.CustomException;
 import com.weather.api.model.dto.DateInfo;
-import com.weather.api.model.entity.Grid;
-import com.weather.api.model.entity.Point;
+import com.weather.api.model.dto.Grid;
+import com.weather.api.model.dto.Point;
 import com.weather.api.model.entity.UltShortTerm;
 import com.weather.api.repository.UltShortTermRepository;
 import lombok.RequiredArgsConstructor;
@@ -130,16 +130,36 @@ public class UltShortTermService {
             String value = entry.getValue();
 
             switch (key) {
-                case "T1H" : ultShortTerm.setT1h(value);
-                case "RN1" : ultShortTerm.setRn1(value);
-                case "SKY" : ultShortTerm.setSky(value);
-                case "UUU" : ultShortTerm.setUuu(value);
-                case "VVV" : ultShortTerm.setVvv(value);
-                case "REH" : ultShortTerm.setReh(value);
-                case "PTY" : ultShortTerm.setPty(value);
-                case "LGT" : ultShortTerm.setLgt(value);
-                case "VEC" : ultShortTerm.setVec(value);
-                case "WSD" : ultShortTerm.setWsd(value);
+                case "T1H" :
+                    ultShortTerm.setT1h(value);
+                    break;
+                case "RN1" :
+                    ultShortTerm.setRn1(value);
+                    break;
+                case "SKY" :
+                    ultShortTerm.setSky(value);
+                    break;
+                case "UUU" :
+                    ultShortTerm.setUuu(value);
+                    break;
+                case "VVV" :
+                    ultShortTerm.setVvv(value);
+                    break;
+                case "REH" :
+                    ultShortTerm.setReh(value);
+                    break;
+                case "PTY" :
+                    ultShortTerm.setPty(value);
+                    break;
+                case "LGT" :
+                    ultShortTerm.setLgt(value);
+                    break;
+                case "VEC" :
+                    ultShortTerm.setVec(value);
+                    break;
+                case "WSD" :
+                    ultShortTerm.setWsd(value);
+                    break;
             }
         }
         return ultShortTermRepository.save(ultShortTerm);

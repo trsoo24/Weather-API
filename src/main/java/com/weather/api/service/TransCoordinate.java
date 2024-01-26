@@ -1,7 +1,7 @@
 package com.weather.api.service;
 
-import com.weather.api.model.entity.Grid;
-import com.weather.api.model.entity.Point;
+import com.weather.api.model.dto.Grid;
+import com.weather.api.model.dto.Point;
 import org.springframework.stereotype.Service;
 
 @Service
