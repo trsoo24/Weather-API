@@ -1,4 +1,4 @@
-package com.weather.api.model.entity;
+package com.weather.api.model.dto;
 
 import lombok.Builder;
 import lombok.Getter;
