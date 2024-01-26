@@ -35,16 +35,16 @@ public class TransCoordinate {
         double ro = Math.tan(Math.PI * 0.25 + olat * 0.5);
         ro = re * sf / Math.pow(ro, sn);
 
-        double latX = point.getLatitude();
-        double lonY = point.getLongitude();
+        double latX = point.getLongitude();
+        double lonY = point.getLatitude();
         double ra = Math.tan(Math.PI * 0.25 + (latX) * DEGRAD * 0.5);
         ra = re * sf / Math.pow(ra, sn);
         double theta = lonY * DEGRAD - olon;
         if (theta > Math.PI) theta -= 2.0 * Math.PI;
         if (theta < -Math.PI) theta += 2.0 * Math.PI;
         theta *= sn;
-        double x = Math.floor(ra * Math.sin(theta) + XO + 0.5);
-        double y = Math.floor(ro - ra * Math.cos(theta) + YO + 0.5);
+        int x = (int) Math.floor(ra * Math.sin(theta) + XO + 0.5);
+        int y = (int) Math.floor(ro - ra * Math.cos(theta) + YO + 0.5);
 
         return new Grid(x, y);
     }
