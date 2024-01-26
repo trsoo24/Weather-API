@@ -11,7 +11,6 @@ import com.weather.api.model.entity.Point;
 import com.weather.api.model.entity.ShortTerm;
 import com.weather.api.repository.ShortTermRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +30,6 @@ import static com.weather.api.exception.ErrorMessage.INVALID_ADDRESS;
 @Service
 @RequiredArgsConstructor
 public class ShortTermService {
-    @Value("${spring.secret.key}")
-    private String apiKey;
     private final ShortTermRepository shortTermRepository;
     private final AddressToPoint addressToPoint;
     private final TransCoordinate transCoordinate;
@@ -40,7 +37,7 @@ public class ShortTermService {
     HashMap<String, HashMap<String, String>> hm = new HashMap<>(); // <날짜&시간 , 단기예보>
 
     public List<ShortTerm> searchShortTerm(DateInfo dateInfo) {
-        String requestUrl = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidFcst";
+        String requestUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
 
         Point point = addressToPoint.getMapString(dateInfo.getAddress());
         Grid grid = transCoordinate.toGrid(point);
@@ -48,20 +45,24 @@ public class ShortTermService {
         // TODO : 이미 조회했던 날짜 값은 repository 안에서 찾기
 
         try {
-            String request = "serviceKey=" + apiKey + "&pageNo=1&numOfRows=1000&dataType=JSON&base_date=" +
-                    dateInfo.getDate() + "&base_time=0500&nx=" + grid.getX() + "&ny=" + grid.getY();
+            String apiKey = "1BVcQIZnVo3dVK3Ina%2Bg4rM6T6h3Ykw1rDZNd6nuUV0oZ44UcxZPfnnQ%2FVvmp65159ylHhDWaFTFRmpeGjWmvw%3D%3D";
+            String request = "?serviceKey=" + apiKey + "&pageNo=1&numOfRows=1000&dataType=JSON&base_date=" +
+                    dateInfo.getDate() + "&base_time=" + dateInfo.getTime() + "&nx=" + grid.getX() + "&ny=" + grid.getY();
 
             URL url = new URL(requestUrl + request);
             HttpURLConnection conUrl = (HttpURLConnection) url.openConnection();
-
             conUrl.setRequestMethod("GET");
+            conUrl.setRequestProperty("Content-type", "application/json");
             BufferedReader br = new BufferedReader(new InputStreamReader(conUrl.getInputStream()));
-            StringBuilder sb = new StringBuilder();
+            String line = "";
+            String result = "";
 
-            while (br.readLine() != null) {
-                sb.append(br.readLine());
+            while ((line = br.readLine()) != null) {
+                result += line;
             }
-            String result = sb.toString();
+
+            br.close();
+            conUrl.disconnect();
 
             JsonParser parser = new JsonParser();
             JsonObject jsonObject = parser.parse(result).getAsJsonObject();
@@ -75,7 +76,7 @@ public class ShortTermService {
 
             JsonObject responseBody = (JsonObject) response.get("body");
             JsonObject responseItems = (JsonObject) responseBody.get("items");
-            JsonArray resultArray = (JsonArray) responseItems.get("item");
+            JsonArray resultArray = responseItems.getAsJsonArray("item");
 
             String category = "";
             String fcstDate = "";
@@ -98,7 +99,7 @@ public class ShortTermService {
 
             List<ShortTerm> list = new ArrayList<>();
             for(String mapKey : hm.keySet()) {
-                list.add(makeEntity(mapKey));
+                list.add(makeEntity(dateInfo.getAddress(), mapKey));
             }
 
             return list;
@@ -120,9 +121,10 @@ public class ShortTermService {
     }
 
     @Transactional
-    private ShortTerm makeEntity(String date) {
+    private ShortTerm makeEntity(String address, String date) {
         ShortTerm shortTerm = new ShortTerm();
         shortTerm.setDateTime(date);
+        shortTerm.setAddress(address);
         HashMap<String, String> columnHm = hm.get(date);
 
         for (Map.Entry<String, String> entry : columnHm.entrySet()) {
