@@ -86,4 +86,13 @@ public class MidTermService {
             throw new CustomException(FAILED);
         }
     }
+
+    public MidTermTotal findInDB(MidLocationCode midLocationCode) {
+        String date = midLocationCode.getDateTime().substring(0, 5) + "년 " +
+                midLocationCode.getDateTime().substring(5, 7) + "월 " +
+                midLocationCode.getDateTime().substring(7, 9) + "일";
+
+        return midTermTotalRepository.findByDateAndLocation(date, midLocationCode.getLocation())
+                .orElseThrow(() -> new CustomException(NOT_IN_DATABASE));
+    }
 }

@@ -16,8 +16,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static com.weather.api.exception.ErrorMessage.FAILED;
-import static com.weather.api.exception.ErrorMessage.INVALID_ADDRESS;
+import static com.weather.api.exception.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +27,10 @@ public class MidTempService {
     public MidTermTemp searchTemp(MidLocationCode midLocationCode) {
         String requestUrl = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa";
         String regionId = locationToCode.searchTempLocation(midLocationCode.getLocation());
-        String date = midLocationCode.getDateTime().substring(0, 9);
+        String date = midLocationCode.getDateTime().substring(0, 4) + "년"
+                + midLocationCode.getDateTime().substring(4, 6) + "월"
+                + midLocationCode.getDateTime().substring(6, 8) + "일 "
+                + midLocationCode.getDateTime().substring(8, 10) + "시";;
 
         try {
             String apiKey = "1BVcQIZnVo3dVK3Ina%2Bg4rM6T6h3Ykw1rDZNd6nuUV0oZ44UcxZPfnnQ%2FVvmp65159ylHhDWaFTFRmpeGjWmvw%3D%3D";
@@ -107,7 +109,16 @@ public class MidTempService {
             return midTermTempRepository.save(midTermTemp);
         } catch (IOException e) {
             throw new CustomException(FAILED);
-
         }
+    }
+
+    public MidTermTemp findInDB(MidLocationCode midLocationCode) {
+        String date = midLocationCode.getDateTime().substring(0, 4) + "년"
+                + midLocationCode.getDateTime().substring(4, 6) + "월"
+                + midLocationCode.getDateTime().substring(6, 8) + "일 "
+                + midLocationCode.getDateTime().substring(8, 10) + "시";
+
+        return midTermTempRepository.findByDateAndLocation(date, midLocationCode.getLocation())
+                .orElseThrow(() -> new CustomException(NOT_IN_DATABASE));
     }
 }

@@ -28,7 +28,10 @@ public class MidRainService {
     public MidTermRain searchMidRain(MidLocationCode midLocationCode) {
         String requestUrl = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst";
         String regionId = locationToCode.searchRainLocation(midLocationCode.getLocation());
-        String date = midLocationCode.getDateTime().substring(0, 9);
+        String date = midLocationCode.getDateTime().substring(0, 4) + "년"
+                + midLocationCode.getDateTime().substring(4, 6) + "월"
+                + midLocationCode.getDateTime().substring(6, 8) + "일 "
+                + midLocationCode.getDateTime().substring(8, 10) + "시";
 
         try {
             String apiKey = "1BVcQIZnVo3dVK3Ina%2Bg4rM6T6h3Ykw1rDZNd6nuUV0oZ44UcxZPfnnQ%2FVvmp65159ylHhDWaFTFRmpeGjWmvw%3D%3D";
@@ -127,5 +130,15 @@ public class MidRainService {
         } catch (IOException e) {
             throw new CustomException(FAILED);
         }
+    }
+
+    public MidTermRain findInDB(MidLocationCode midLocationCode) {
+        String date = midLocationCode.getDateTime().substring(0, 4) + "년"
+                + midLocationCode.getDateTime().substring(4, 6) + "월"
+                + midLocationCode.getDateTime().substring(6, 8) + "일 "
+                + midLocationCode.getDateTime().substring(8, 10) + "시";
+
+        return midTermRainRepository.findByDateAndLocation(date, midLocationCode.getLocation())
+                .orElseThrow(() -> new CustomException(NOT_IN_DATABASE));
     }
 }

@@ -177,4 +177,14 @@ public class ShortTermService {
         }
         return shortTermRepository.save(shortTerm);
     }
+
+    public ShortTerm searchInDB(String dateNumber) { // "202401270600" 형식 입력
+        String dateTime = dateNumber.substring(0, 4) + "년"
+                + dateNumber.substring(4, 6) + "월"
+                + dateNumber.substring(6, 8) + "일 "
+                + dateNumber.substring(8, 10) + "시";
+
+        return shortTermRepository.findByDateTime(dateTime)
+                .orElseThrow(() -> new CustomException(NOT_IN_DATABASE));
+    }
 }
