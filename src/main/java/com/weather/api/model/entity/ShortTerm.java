@@ -15,7 +15,7 @@ public class ShortTerm {
     private Long id;
     @Column(nullable = false, unique = true)
     private String dateTime; // yyyy년 MM월 dd일 HH시 형식
-    private String location; // 지역 (도로명 주소)
+    private String address; // 지역 (도로명 주소)
     private String pop; // 강수 확률
     private String pty; // 강수 형태
     private String pcp; // 1시간 강수량

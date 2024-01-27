@@ -8,8 +8,8 @@ import com.weather.api.exception.CustomException;
 import com.weather.api.model.dto.DateInfo;
 import com.weather.api.model.entity.Grid;
 import com.weather.api.model.entity.Point;
-import com.weather.api.model.entity.ShortTerm;
-import com.weather.api.repository.ShortTermRepository;
+import com.weather.api.model.entity.UltShortTerm;
+import com.weather.api.repository.UltShortTermRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,15 +29,14 @@ import static com.weather.api.exception.ErrorMessage.INVALID_ADDRESS;
 
 @Service
 @RequiredArgsConstructor
-public class ShortTermService {
-    private final ShortTermRepository shortTermRepository;
+public class UltShortTermService {
     private final AddressToPoint addressToPoint;
     private final TransCoordinate transCoordinate;
+    private final UltShortTermRepository ultShortTermRepository;
+    HashMap<String, HashMap<String, String>> hm = new HashMap<>(); // <날짜&시간 , 초단기예보>
 
-    HashMap<String, HashMap<String, String>> hm = new HashMap<>(); // <날짜&시간 , 단기예보>
-
-    public List<ShortTerm> searchShortTerm(DateInfo dateInfo) {
-        String requestUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
+    public List<UltShortTerm> searchUltShortTerm(DateInfo dateInfo) {
+        String requestUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst";
 
         Point point = addressToPoint.getMapString(dateInfo.getAddress());
         Grid grid = transCoordinate.toGrid(point);
@@ -97,13 +96,12 @@ public class ShortTermService {
                 putInfo(date, category, value);
             }
 
-            List<ShortTerm> list = new ArrayList<>();
+            List<UltShortTerm> list = new ArrayList<>();
             for(String mapKey : hm.keySet()) {
                 list.add(makeEntity(dateInfo.getAddress(), mapKey));
             }
 
             return list;
-
         } catch (IOException e) {
             throw new CustomException(INVALID_ADDRESS);
         }
@@ -121,33 +119,29 @@ public class ShortTermService {
     }
 
     @Transactional
-    private ShortTerm makeEntity(String address, String date) {
-        ShortTerm shortTerm = new ShortTerm();
-        shortTerm.setDateTime(date);
-        shortTerm.setAddress(address);
+    private UltShortTerm makeEntity(String address, String date) {
+        UltShortTerm ultShortTerm = new UltShortTerm();
+        ultShortTerm.setDateTime(date);
         HashMap<String, String> columnHm = hm.get(date);
+        ultShortTerm.setAddress(address);
 
         for (Map.Entry<String, String> entry : columnHm.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
 
             switch (key) {
-                case "POP" : shortTerm.setPop(value);
-                case "PTY" : shortTerm.setPty(value);
-                case "PCP" : shortTerm.setPcp(value);
-                case "REH" : shortTerm.setReh(value);
-                case "SNO" : shortTerm.setSno(value);
-                case "SKY" : shortTerm.setSky(value);
-                case "TMP" : shortTerm.setTmp(value);
-                case "TMN" : shortTerm.setTmn(value);
-                case "TMX" : shortTerm.setTmx(value);
-                case "UUU" : shortTerm.setUuu(value);
-                case "VVV" : shortTerm.setVvv(value);
-                case "WAV" : shortTerm.setWav(value);
-                case "VEC" : shortTerm.setVec(value);
-                case "WSD" : shortTerm.setWsd(value);
+                case "T1H" : ultShortTerm.setT1h(value);
+                case "RN1" : ultShortTerm.setRn1(value);
+                case "SKY" : ultShortTerm.setSky(value);
+                case "UUU" : ultShortTerm.setUuu(value);
+                case "VVV" : ultShortTerm.setVvv(value);
+                case "REH" : ultShortTerm.setReh(value);
+                case "PTY" : ultShortTerm.setPty(value);
+                case "LGT" : ultShortTerm.setLgt(value);
+                case "VEC" : ultShortTerm.setVec(value);
+                case "WSD" : ultShortTerm.setWsd(value);
             }
         }
-        return shortTermRepository.save(shortTerm);
+        return ultShortTermRepository.save(ultShortTerm);
     }
 }
