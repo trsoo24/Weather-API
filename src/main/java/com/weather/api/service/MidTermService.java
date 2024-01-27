@@ -17,8 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static com.weather.api.exception.ErrorMessage.FAILED;
-import static com.weather.api.exception.ErrorMessage.INVALID_ADDRESS;
+import static com.weather.api.exception.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +57,7 @@ public class MidTermService {
             String resultCode = responseHeader.get("resultCode").getAsString();
 
             if (!resultCode.equals("00")) {
-                throw new CustomException(FAILED);
+                throw new CustomException(API_FAILED);
             }
 
             JsonObject responseBody = (JsonObject) response.get("body");
@@ -84,7 +83,7 @@ public class MidTermService {
             return midTermTotalRepository.save(midTermTotal);
 
         } catch (IOException e) {
-            throw new CustomException(INVALID_ADDRESS);
+            throw new CustomException(FAILED);
         }
     }
 }

@@ -3,7 +3,7 @@ package com.weather.api.service;
 import com.weather.api.exception.CustomException;
 import org.springframework.stereotype.Service;
 
-import static com.weather.api.exception.ErrorMessage.FAILED;
+import static com.weather.api.exception.ErrorMessage.INVALID_ADDRESS;
 
 @Service
 public class LocationToCode {
@@ -29,7 +29,7 @@ public class LocationToCode {
         } else if (location.equals("제주") || location.equals("제주도")) {
             return "184";
         } else {
-            throw new CustomException(FAILED);
+            throw new CustomException(INVALID_ADDRESS);
         }
     }
 
@@ -55,7 +55,7 @@ public class LocationToCode {
         } else if (location.equals("제주") || location.equals("제주도")) {
             return "11G00000";
         } else {
-            throw new CustomException(FAILED);
+            throw new CustomException(INVALID_ADDRESS);
         }
     }
 
@@ -109,7 +109,7 @@ public class LocationToCode {
         } else if (location.equals("포항")) {
             return "11H10201";
         } else {
-            throw new CustomException(FAILED);
+            throw new CustomException(INVALID_ADDRESS);
         }
     }
 }

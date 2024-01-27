@@ -106,7 +106,7 @@ public class MidTempService {
 
             return midTermTempRepository.save(midTermTemp);
         } catch (IOException e) {
-            throw new CustomException(INVALID_ADDRESS);
+            throw new CustomException(FAILED);
 
         }
     }

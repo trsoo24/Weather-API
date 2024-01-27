@@ -24,8 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.weather.api.exception.ErrorMessage.FAILED;
-import static com.weather.api.exception.ErrorMessage.INVALID_ADDRESS;
+import static com.weather.api.exception.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +70,7 @@ public class ShortTermService {
             String resultCode = responseHeader.get("resultCode").getAsString();
 
             if (!resultCode.equals("00")) {
-                throw new CustomException(FAILED);
+                throw new CustomException(API_FAILED);
             }
 
             JsonObject responseBody = (JsonObject) response.get("body");
@@ -105,7 +104,7 @@ public class ShortTermService {
             return list;
 
         } catch (IOException e) {
-            throw new CustomException(INVALID_ADDRESS);
+            throw new CustomException(FAILED);
         }
     }
 
