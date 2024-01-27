@@ -3,7 +3,7 @@ package com.weather.api.service;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.weather.api.exception.CustomException;
-import com.weather.api.model.entity.Point;
+import com.weather.api.model.dto.Point;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;

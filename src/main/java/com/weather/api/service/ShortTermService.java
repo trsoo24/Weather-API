@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.weather.api.exception.CustomException;
 import com.weather.api.model.dto.DateInfo;
-import com.weather.api.model.entity.Grid;
-import com.weather.api.model.entity.Point;
+import com.weather.api.model.dto.Grid;
+import com.weather.api.model.dto.Point;
 import com.weather.api.model.entity.ShortTerm;
 import com.weather.api.repository.ShortTermRepository;
 import lombok.RequiredArgsConstructor;
@@ -132,20 +132,48 @@ public class ShortTermService {
             String value = entry.getValue();
 
             switch (key) {
-                case "POP" : shortTerm.setPop(value);
-                case "PTY" : shortTerm.setPty(value);
-                case "PCP" : shortTerm.setPcp(value);
-                case "REH" : shortTerm.setReh(value);
-                case "SNO" : shortTerm.setSno(value);
-                case "SKY" : shortTerm.setSky(value);
-                case "TMP" : shortTerm.setTmp(value);
-                case "TMN" : shortTerm.setTmn(value);
-                case "TMX" : shortTerm.setTmx(value);
-                case "UUU" : shortTerm.setUuu(value);
-                case "VVV" : shortTerm.setVvv(value);
-                case "WAV" : shortTerm.setWav(value);
-                case "VEC" : shortTerm.setVec(value);
-                case "WSD" : shortTerm.setWsd(value);
+                case "POP" :
+                    shortTerm.setPop(value);
+                    break;
+                case "PTY" :
+                    shortTerm.setPty(value);
+                    break;
+                case "PCP" :
+                    shortTerm.setPcp(value);
+                    break;
+                case "REH" :
+                    shortTerm.setReh(value);
+                    break;
+                case "SNO" :
+                    shortTerm.setSno(value);
+                    break;
+                case "SKY" :
+                    shortTerm.setSky(value);
+                    break;
+                case "TMP" :
+                    shortTerm.setTmp(value);
+                    break;
+                case "TMN" :
+                    shortTerm.setTmn(value);
+                    break;
+                case "TMX" :
+                    shortTerm.setTmx(value);
+                    break;
+                case "UUU" :
+                    shortTerm.setUuu(value);
+                    break;
+                case "VVV" :
+                    shortTerm.setVvv(value);
+                    break;
+                case "WAV" :
+                    shortTerm.setWav(value);
+                    break;
+                case "VEC" :
+                    shortTerm.setVec(value);
+                    break;
+                case "WSD" :
+                    shortTerm.setWsd(value);
+                    break;
             }
         }
         return shortTermRepository.save(shortTerm);
