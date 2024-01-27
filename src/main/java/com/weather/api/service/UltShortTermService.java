@@ -59,7 +59,6 @@ public class UltShortTermService {
                 result += line;
             }
 
-            br.close();
             conUrl.disconnect();
 
             JsonParser parser = new JsonParser();

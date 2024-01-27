@@ -1,7 +1,6 @@
 package com.weather.api.service;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.weather.api.exception.CustomException;
@@ -47,7 +46,6 @@ public class MidTermService {
                 result += line;
             }
 
-            br.close();
             conUrl.disconnect();
 
             JsonParser parser = new JsonParser();
@@ -56,7 +54,9 @@ public class MidTermService {
             JsonObject responseHeader = (JsonObject) response.get("header");
             String resultCode = responseHeader.get("resultCode").getAsString();
 
-            if (!resultCode.equals("00")) {
+            if (resultCode.equals("03")) {
+                throw new CustomException(API_NO_DATA);
+            } else if (!resultCode.equals("00")) {
                 throw new CustomException(API_FAILED);
             }
 
@@ -65,14 +65,12 @@ public class MidTermService {
             JsonArray resultArray = responseItems.getAsJsonArray("item");
 
             String description = "";
-            String date = dateTime.substring(0, 5) + "년 " +
-                    dateTime.substring(5, 7) + "월 " +
+            String date = dateTime.substring(0, 5) + "년" +
+                    dateTime.substring(5, 7) + "월" +
                     dateTime.substring(7, 9) + "일";
 
-            for(JsonElement element : resultArray) {
-                JsonObject object = element.getAsJsonObject();
-                description = object.getAsJsonObject().get("wfSv").getAsString();
-            }
+            JsonObject object = resultArray.get(0).getAsJsonObject();
+            description = object.getAsJsonObject().get("wfSv").getAsString();
 
             MidTermTotal midTermTotal = MidTermTotal.builder()
                     .date(date)
@@ -80,7 +78,9 @@ public class MidTermService {
                     .description(description)
                     .build();
 
-            return midTermTotalRepository.save(midTermTotal);
+            midTermTotalRepository.save(midTermTotal);
+
+            return midTermTotal;
 
         } catch (IOException e) {
             throw new CustomException(FAILED);
@@ -88,9 +88,9 @@ public class MidTermService {
     }
 
     public MidTermTotal findInDB(MidLocationCode midLocationCode) {
-        String date = midLocationCode.getDateTime().substring(0, 5) + "년 " +
-                midLocationCode.getDateTime().substring(5, 7) + "월 " +
-                midLocationCode.getDateTime().substring(7, 9) + "일";
+        String date = midLocationCode.getDateTime().substring(0, 4) + "년" +
+                midLocationCode.getDateTime().substring(4, 6) + "월" +
+                midLocationCode.getDateTime().substring(6, 8) + "일";
 
         return midTermTotalRepository.findByDateAndLocation(date, midLocationCode.getLocation())
                 .orElseThrow(() -> new CustomException(NOT_IN_DATABASE));
