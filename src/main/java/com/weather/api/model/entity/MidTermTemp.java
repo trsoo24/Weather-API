@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"date", "location"})})
 @Getter
 @Service
 @NoArgsConstructor
@@ -18,7 +20,9 @@ public class MidTermTemp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String date;
+    @Column(nullable = false)
     private String location;
     private String taMin3; // 3일 후 예상 최저 기온
     private String taMax3; // 3일 후 예상 최고 기온

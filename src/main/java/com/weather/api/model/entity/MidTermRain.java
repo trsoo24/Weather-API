@@ -5,6 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"date", "location"})})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,7 +16,9 @@ public class MidTermRain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String date;
+    @Column(nullable = false)
     private String location;
     private String rnSt3Am; // 3일 후 오전 강수 확률
     private String rnSt3Pm; // 3일 후 오후 강수 확률

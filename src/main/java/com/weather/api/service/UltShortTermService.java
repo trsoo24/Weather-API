@@ -24,8 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.weather.api.exception.ErrorMessage.FAILED;
-import static com.weather.api.exception.ErrorMessage.INVALID_ADDRESS;
+import static com.weather.api.exception.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
@@ -70,7 +69,7 @@ public class UltShortTermService {
             String resultCode = responseHeader.get("resultCode").getAsString();
 
             if (!resultCode.equals("00")) {
-                throw new CustomException(FAILED);
+                throw new CustomException(API_FAILED);
             }
 
             JsonObject responseBody = (JsonObject) response.get("body");
@@ -103,7 +102,7 @@ public class UltShortTermService {
 
             return list;
         } catch (IOException e) {
-            throw new CustomException(INVALID_ADDRESS);
+            throw new CustomException(FAILED);
         }
     }
 
@@ -163,5 +162,15 @@ public class UltShortTermService {
             }
         }
         return ultShortTermRepository.save(ultShortTerm);
+    }
+
+    public UltShortTerm searchInDB(String dateNumber) { // "202401270600" 형식 입력
+        String dateTime = dateNumber.substring(0, 4) + "년"
+                + dateNumber.substring(4, 6) + "월"
+                + dateNumber.substring(6, 8) + "일 "
+                + dateNumber.substring(8, 10) + "시";
+
+        return ultShortTermRepository.findByDateTime(dateTime)
+                .orElseThrow(() -> new CustomException(NOT_IN_DATABASE));
     }
 }

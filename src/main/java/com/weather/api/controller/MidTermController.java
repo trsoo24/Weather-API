@@ -9,10 +9,7 @@ import com.weather.api.service.MidTempService;
 import com.weather.api.service.MidTermService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -37,5 +34,18 @@ public class MidTermController {
     @PostMapping("/temp")
     public ResponseEntity<MidTermTemp> searchTemp(@RequestBody @Valid MidLocationCode midLocationCode) {
         return ResponseEntity.ok(midTempService.searchTemp(midLocationCode));
+    }
+
+    @GetMapping("/total")
+    public ResponseEntity<MidTermTotal> searchTotalInDB(@RequestBody @Valid MidLocationCode midLocationCode) {
+        return ResponseEntity.ok(midTermService.findInDB(midLocationCode));
+    }
+    @GetMapping("/rain")
+    public ResponseEntity<MidTermRain> searchRainInDB(@RequestBody @Valid MidLocationCode midLocationCode) {
+        return ResponseEntity.ok(midRainService.findInDB(midLocationCode));
+    }
+    @GetMapping("/temp")
+    public ResponseEntity<MidTermTemp> searchTempInDB(@RequestBody @Valid MidLocationCode midLocationCode) {
+        return ResponseEntity.ok(midTempService.findInDB(midLocationCode));
     }
 }

@@ -5,10 +5,7 @@ import com.weather.api.model.entity.UltShortTerm;
 import com.weather.api.service.UltShortTermService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -22,5 +19,10 @@ public class UltShortTermController {
     @PostMapping("/fcst")
     public ResponseEntity<List<UltShortTerm>> useUltShortTermApi (@RequestBody @Valid DateInfo dateInfo) {
         return ResponseEntity.ok(ultShortTermService.searchUltShortTerm(dateInfo));
+    }
+
+    @GetMapping("/fcst")
+    public ResponseEntity<UltShortTerm> findInDB(@RequestParam @Valid String dateTime) {
+        return ResponseEntity.ok(ultShortTermService.searchInDB(dateTime));
     }
 }

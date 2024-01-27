@@ -20,4 +20,9 @@ public class ShortTermController {
     public ResponseEntity<List<ShortTerm>> useShortTermApi(@RequestBody @Valid DateInfo dateInfo) {
         return ResponseEntity.ok(shortTermService.searchShortTerm(dateInfo));
     }
+
+    @GetMapping("/fcst")
+    public ResponseEntity<ShortTerm> findInDB(@RequestParam @Valid String dateTime) {
+        return ResponseEntity.ok(shortTermService.searchInDB(dateTime));
+    }
 }
