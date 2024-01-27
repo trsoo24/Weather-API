@@ -7,7 +7,7 @@ import static com.weather.api.exception.ErrorMessage.FAILED;
 
 @Service
 public class LocationToCode {
-    public String searchTotalLocation(String location) {
+    public String searchTotalLocation(String location) { // 전망 조회
         if (location.equals("강원도")) {
             return "105";
         } else if (location.equals("전국")) {
@@ -33,7 +33,7 @@ public class LocationToCode {
         }
     }
 
-    public String searchRainLocation(String location) {
+    public String searchRainLocation(String location) { // 강수량 조회
         if (location.equals("서울") || location.equals("인천") || location.equals("경기도") || location.equals("경기")) {
             return "11B00000";
         } else if (location.equals("강원도영서") || location.equals("강원영서")) {
@@ -54,6 +54,60 @@ public class LocationToCode {
             return "11H20000";
         } else if (location.equals("제주") || location.equals("제주도")) {
             return "11G00000";
+        } else {
+            throw new CustomException(FAILED);
+        }
+    }
+
+    public String searchTempLocation(String location) { // 기온 조회
+        if (location.equals("서울")) {
+            return "11B10101";
+        } else if (location.equals("인천")) {
+            return "11B20201";
+        } else if (location.equals("수원")) {
+            return "11B20601";
+        } else if (location.equals("파주")) {
+            return "11B20305";
+        } else if (location.equals("춘천")) {
+            return "11D10301";
+        } else if (location.equals("원주")) {
+            return "11D10401";
+        } else if (location.equals("강릉")) {
+            return "11D20501";
+        } else if (location.equals("대전")) {
+            return "11C20401";
+        } else if (location.equals("서산")) {
+            return "11C20101";
+        } else if (location.equals("세종")) {
+            return "11C20404";
+        } else if (location.equals("청주")) {
+            return "11C10301";
+        } else if (location.equals("제주")) {
+            return "11G00201";
+        } else if (location.equals("서귀포")) {
+            return "11G00401";
+        } else if (location.equals("광주")) {
+            return "11F20501";
+        } else if (location.equals("목포")) {
+            return "21F20801";
+        } else if (location.equals("여수")) {
+            return "11F20401";
+        } else if (location.equals("전주")) {
+            return "11F10201";
+        } else if (location.equals("군산")) {
+            return "21F10501";
+        } else if (location.equals("부산")) {
+            return "11H20201";
+        } else if (location.equals("울산")) {
+            return "11H20101";
+        } else if (location.equals("창원")) {
+            return "11H20301";
+        } else if (location.equals("대구")) {
+            return "11H10701";
+        } else if (location.equals("안동")) {
+            return "11H10501";
+        } else if (location.equals("포항")) {
+            return "11H10201";
         } else {
             throw new CustomException(FAILED);
         }
