@@ -1,6 +1,7 @@
 package com.weather.api.service;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.weather.api.exception.CustomException;
@@ -35,7 +36,7 @@ public class MidRainService {
 
         try {
             String apiKey = "1BVcQIZnVo3dVK3Ina%2Bg4rM6T6h3Ykw1rDZNd6nuUV0oZ44UcxZPfnnQ%2FVvmp65159ylHhDWaFTFRmpeGjWmvw%3D%3D";
-            String request = "?serviceKey=" + apiKey + "&numOfRows=1000&pageNo=1&regId=" +
+            String request = "?serviceKey=" + apiKey + "&numOfRows=1000&dataType=JSON&pageNo=1&regId=" +
                     regionId + "&tmFc=" + midLocationCode.getDateTime();
 
             URL url = new URL(requestUrl + request);
@@ -50,7 +51,6 @@ public class MidRainService {
                 result += line;
             }
 
-            br.close();
             conUrl.disconnect();
 
             JsonParser parser = new JsonParser();
@@ -67,7 +67,7 @@ public class MidRainService {
             JsonObject responseItems = (JsonObject) responseBody.get("items");
             JsonArray resultArray = responseItems.getAsJsonArray("item");
 
-            JsonObject object = resultArray.getAsJsonObject();
+            JsonObject object = resultArray.get(0).getAsJsonObject();
             String rnSt3Am = object.getAsJsonObject().get("rnSt3Am").getAsString();
             String rnSt3Pm = object.getAsJsonObject().get("rnSt3Pm").getAsString();
             String rnSt4Am = object.getAsJsonObject().get("rnSt4Am").getAsString();
@@ -135,8 +135,7 @@ public class MidRainService {
     public MidTermRain findInDB(MidLocationCode midLocationCode) {
         String date = midLocationCode.getDateTime().substring(0, 4) + "년"
                 + midLocationCode.getDateTime().substring(4, 6) + "월"
-                + midLocationCode.getDateTime().substring(6, 8) + "일 "
-                + midLocationCode.getDateTime().substring(8, 10) + "시";
+                + midLocationCode.getDateTime().substring(6, 8) + "일";
 
         return midTermRainRepository.findByDateAndLocation(date, midLocationCode.getLocation())
                 .orElseThrow(() -> new CustomException(NOT_IN_DATABASE));

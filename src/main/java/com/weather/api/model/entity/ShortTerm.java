@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ShortTerm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

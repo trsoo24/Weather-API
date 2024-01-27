@@ -60,7 +60,6 @@ public class ShortTermService {
                 result += line;
             }
 
-            br.close();
             conUrl.disconnect();
 
             JsonParser parser = new JsonParser();

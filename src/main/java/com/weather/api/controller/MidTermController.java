@@ -25,17 +25,14 @@ public class MidTermController {
     public ResponseEntity<MidTermTotal> searchTotal(@RequestBody @Valid MidLocationCode midLocationCode) {
         return ResponseEntity.ok(midTermService.searchTotal(midLocationCode));
     }
-
     @PostMapping("/rain")
     public ResponseEntity<MidTermRain> searchRain(@RequestBody @Valid MidLocationCode midLocationCode) {
         return ResponseEntity.ok(midRainService.searchMidRain(midLocationCode));
     }
-
     @PostMapping("/temp")
     public ResponseEntity<MidTermTemp> searchTemp(@RequestBody @Valid MidLocationCode midLocationCode) {
         return ResponseEntity.ok(midTempService.searchTemp(midLocationCode));
     }
-
     @GetMapping("/total")
     public ResponseEntity<MidTermTotal> searchTotalInDB(@RequestBody @Valid MidLocationCode midLocationCode) {
         return ResponseEntity.ok(midTermService.findInDB(midLocationCode));

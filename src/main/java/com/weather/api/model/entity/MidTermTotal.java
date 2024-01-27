@@ -21,4 +21,5 @@ public class MidTermTotal {
     @Column(nullable = false)
     private String location;
     private String description;
+    // ALTER TABLE mid_term_total MODIFY COLUMN description VARCHAR(1024); 로 길이 조정
 }
